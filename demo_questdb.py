@@ -16,14 +16,20 @@ class QuestCallback(SocketCallback):
 
     async def writer(self):
         while True:
-            await self.connect()
+            try:
+                await self.connect()
+            except:
+                exit(-1)
             count = self.queue.qsize()
             if count == 0:
                 count = 1
 
             async with self.read_many_queue(count) as update:
                 update = "\n".join(update) + "\n"
-                self.conn.write(update.encode())
+                try:
+                    self.conn.write(update.encode())
+                except:
+                    exit(-2)
 
     async def write(self, data):
         d = self.format(data)
