@@ -48,7 +48,7 @@ class TradeQuest(QuestCallback, BackendCallback):
     default_key = 'trades'
 
     def format(self, data):
-        return f'side="{data["side"]}",price={data["price"]},amount={data["amount"]},id="{str(data["id"])}"'
+        return f'side="{data["side"]}",price={data["price"]},amount={data["amount"]}'
 
 
 def main():
