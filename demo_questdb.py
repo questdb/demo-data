@@ -35,30 +35,12 @@ class QuestCallback(SocketCallback):
                 except:
                     exit(-2)
 
-    async def write(self, data):
-        d = self.format(data)
-        timestamp = data["timestamp"]
-        timestamp_str = f',timestamp={int(timestamp * 1_000_000_000)}i' if timestamp is not None else ''
-        update = f'{self.key},symbol={data["symbol"]} {d}{timestamp_str}'
-        await self.queue.put(update)
-
-    def format(self, data):
-        ret = []
-        for key, value in data.items():
-            if key in {'timestamp', 'exchange', 'symbol', 'receipt_timestamp'}:
-                continue
-            if isinstance(value, str):
-                ret.append(f'{key}="{value}"')
-            else:
-                ret.append(f'{key}={value}')
-        return ','.join(ret)
-
-
 class TradeQuest(QuestCallback, BackendCallback):
     default_key = 'trades'
 
-    def format(self, data):
-        return f'side="{data["side"]}",price={data["price"]},amount={data["amount"]}'
+    async def write(self, data):
+        update = f'{self.key},symbol={data["symbol"]},side={data["side"]} price={data["price"]},amount={data["amount"]} {int(data["timestamp"] * 1_000_000_000)}'
+        await self.queue.put(update)
 
 
 def main():
