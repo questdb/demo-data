@@ -24,11 +24,7 @@ class QuestCallback(SocketCallback):
                 await self.connect()
             except:
                 exit(-1)
-            count = self.queue.qsize()
-            if count == 0:
-                count = 1
-
-            async with self.read_many_queue(count) as update:
+            async with self.read_queue() as update:
                 update = "\n".join(update) + "\n"
                 try:
                     self.conn.write(update.encode())
