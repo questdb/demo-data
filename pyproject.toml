@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "demo-data"
+version = "v0.9"
+description = "QuestDB demo website injection app"
+authors = ["QuestDB"]
+license = "Apache 2.0"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+cryptofeed = "^2.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

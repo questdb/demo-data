@@ -1,12 +1,15 @@
 #
 # This product based on cryptofeed https://github.com/bmoscon/cryptofeed software developed by Bryant Moscon (http://www.bryantmoscon.com/) Copyright (C) 2017-2022 Bryant Moscon - bmoscon@gmail.com
 #
+import argparse
+import os
 
 from cryptofeed import FeedHandler
 from cryptofeed.backends.backend import BackendCallback
 from cryptofeed.backends.socket import SocketCallback
 from cryptofeed.defines import TRADES
-from cryptofeed.exchanges import Coinbase
+from cryptofeed.exchanges import OKX
+
 
 QUEST_HOST = '127.0.0.1'
 QUEST_PORT = 9009
@@ -31,18 +34,56 @@ class QuestCallback(SocketCallback):
                 except:
                     exit(-2)
 
+
 class TradeQuest(QuestCallback, BackendCallback):
     default_key = 'trades'
 
     async def write(self, data):
         update = f'{self.key},symbol={data["symbol"]},side={data["side"]} price={data["price"]},amount={data["amount"]} {int(data["timestamp"] * 1_000_000_000)}'
         await self.queue.put(update)
+        if data["symbol"].endswith("-USDT"):
+            # Fake *-USD trades with *-USDT
+            await self.queue.put(update.replace("-USDT,side", "-USD,side"))
 
 
 def main():
+    host = os.getenv("QUEST_HOST", default=QUEST_HOST)
+    port = os.getenv("QUEST_PORT", default=QUEST_PORT)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('symbols', nargs='+', help='')
+
     hanlder = FeedHandler()
-    hanlder.add_feed(Coinbase(channels=[TRADES], symbols=['BTC-USD', 'ETH-USD'],
-                              callbacks={TRADES: TradeQuest(host=QUEST_HOST, port=QUEST_PORT)}))
+
+    symbols = [
+        'ADA-USDC',
+        'ADA-USDT',
+        'AVAX-USD',
+        'BTC-USDC',
+        'BTC-USDT',
+        'DAI-USD',
+        'DOGE-USD',
+        'DOT-USD',
+        'ETH-BTC',
+        'ETH-DAI',
+        'ETH-USDC',
+        'ETH-USDT',
+        'LTC-BTC',
+        'LTC-USD',
+        'MATIC-USD',
+        'SHIB-USD',
+        'SOL-BTC',
+        'SOL-ETH',
+        'SOL-USD',
+        'UNI-USD',
+        'USDT-USDC',
+        'XLM-USD',
+    ]
+
+    # USDT is almost USD
+    symbols = [s.replace("-USD", "-USDT") if not s.endswith('-USDT') and not s.endswith('-USDC') else s for s in symbols]
+    hanlder.add_feed(OKX(channels=[TRADES], symbols=symbols,
+                         callbacks={TRADES: TradeQuest(host=host, port=port)}))
     hanlder.run()
 
 
