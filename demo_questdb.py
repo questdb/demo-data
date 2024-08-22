@@ -43,8 +43,7 @@ class TradeQuest(QuestCallback, BackendCallback):
         await self.queue.put(update)
         if data["symbol"].endswith("-USDT"):
             # Fake *-USD trades with *-USDT
-            data["symbol"] = data["symbol"].replace("-USDT", "-USD")
-            await self.queue.put(update)
+            await self.queue.put(update.replace("-USDT,side", "-USD,side"))
 
 
 def main():
@@ -57,28 +56,28 @@ def main():
     hanlder = FeedHandler()
 
     symbols = [
-        'SOL-ETH',
-        'SOL-USD',
-        'SOL-BTC',
-        'DOGE-USD',
-        'DOT-USD',
-        'DAI-USD',
-        'ETH-DAI',
-        'MATIC-USD',
-        'SHIB-USD',
+        'ADA-USDC',
+        'ADA-USDT',
         'AVAX-USD',
-        'LTC-USD',
-        'LTC-BTC',
-        'XLM-USD',
-        'UNI-USD',
-        'ETH-BTC',
         'BTC-USDC',
         'BTC-USDT',
-        'ETH-USDT',
+        'DAI-USD',
+        'DOGE-USD',
+        'DOT-USD',
+        'ETH-BTC',
+        'ETH-DAI',
         'ETH-USDC',
+        'ETH-USDT',
+        'LTC-BTC',
+        'LTC-USD',
+        'MATIC-USD',
+        'SHIB-USD',
+        'SOL-BTC',
+        'SOL-ETH',
+        'SOL-USD',
+        'UNI-USD',
         'USDT-USDC',
-        'ADA-USDT',
-        'ADA-USDC'
+        'XLM-USD',
     ]
 
     # USDT is almost USD

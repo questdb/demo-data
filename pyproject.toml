@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "demo-data"
-version = "0.1.0"
+version = "v0.9"
 description = "QuestDB demo website injection app"
 authors = ["QuestDB"]
 license = "Apache 2.0"
