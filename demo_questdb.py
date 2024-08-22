@@ -1,13 +1,15 @@
 #
 # This product based on cryptofeed https://github.com/bmoscon/cryptofeed software developed by Bryant Moscon (http://www.bryantmoscon.com/) Copyright (C) 2017-2022 Bryant Moscon - bmoscon@gmail.com
 #
+import argparse
+import os
 
 from cryptofeed import FeedHandler
 from cryptofeed.backends.backend import BackendCallback
 from cryptofeed.backends.socket import SocketCallback
 from cryptofeed.defines import TRADES
-from cryptofeed.exchanges import Coinbase
-import os
+from cryptofeed.exchanges import OKX
+
 
 QUEST_HOST = '127.0.0.1'
 QUEST_PORT = 9009
@@ -44,9 +46,46 @@ def main():
     host = os.getenv("QUEST_HOST", default=QUEST_HOST)
     port = os.getenv("QUEST_PORT", default=QUEST_PORT)
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('symbols', nargs='+', help='')
+
     hanlder = FeedHandler()
-    hanlder.add_feed(Coinbase(channels=[TRADES], symbols=['BTC-USD', 'ETH-USD', 'ADA-BTC', 'ADA-USD', 'SOL-ETH', 'SOL-USD', 'SOL-BTC', 'DOGE-BTC', 'DOGE-USD', 'DOT-USD', 'DOT-BTC', 'DAI-USD', 'ETH-DAI', 'MATIC-BTC', 'MATIC-USD', 'SHIB-USD', 'AVAX-BTC', 'AVAX-USD', 'LTC-USD', 'LTC-BTC', 'XLM-USD', 'XLM-BTC', 'UNI-USD', 'UNI-BTC', 'ETH-BTC', 'BTC-USDC', 'BTC-USDT', 'ETH-USDT', 'ETH-USDC', 'USDT-USDC', 'ADA-USDT', 'ADA-USDC'],
-                              callbacks={TRADES: TradeQuest(host=host, port=port)}))
+    hanlder.add_feed(OKX(channels=[TRADES], symbols=[
+        'ADA-USDC'
+        'ADA-USDT',
+        'ADA-USDT',
+        'AVAX-USDT',
+        'BTC-USDC',
+        'BTC-USDT',
+        'BTC-USDT',
+        'DAI-USDT',
+        'DOGE-USDT',
+        'DOT-USDT',
+        'ETH-DAI',
+        'ETH-USDC',
+        'ETH-USDT',
+        'ETH-USDT',
+        'LTC-USDT',
+        'MATIC-USDT',
+        'SHIB-USDT',
+        'SOL-BTC',
+        'SOL-ETH',
+        'SOL-USDT',
+        'UNI-USDT',
+        'USDT-USDC',
+        'XLM-USDT',
+        #'ADA-BTC',
+        #'AVAX-BTC',
+        #'DOGE-BTC',
+        #'DOT-BTC',
+        #'ETH-BTC',
+        #'LTC-BTC',
+        #'MATIC-BTC',
+        #'UNI-BTC',
+        #'XLM-BTC',
+        ],
+        callbacks={TRADES: TradeQuest(host=host,
+        port=port)}))
     hanlder.run()
 
 
