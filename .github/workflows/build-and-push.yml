@@ -6,11 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: install poetry
-        run: pip install poetry
       - name: Check for pyproject.toml update
         id: check-for-update
         run: |
@@ -18,6 +13,7 @@ jobs:
             echo version=$(git diff HEAD~ pyproject.toml | grep -P '\+version = "(v\d+\.\d+)"' | grep -oP 'v\d+\.\d+') >> "$GITHUB_OUTPUT"
           else
             echo version=skip >> $GITHUB_OUTPUT
+          fi
       - name: Set up QEMU
         if: ${{ steps.id.check-for-update.output.version != 'skip'}}
         uses: docker/setup-qemu-action@v3
