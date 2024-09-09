@@ -70,7 +70,6 @@ def main():
         'ETH-USDT',
         'LTC-BTC',
         'LTC-USD',
-        'MATIC-USD',
         'SHIB-USD',
         'SOL-BTC',
         'SOL-ETH',
