@@ -17,7 +17,7 @@ jobs:
           if git diff HEAD~ pyproject.toml | grep -P '\+version = "(v\d+\.\d+)"'; then
             echo version=$(git diff HEAD~ pyproject.toml | grep -P '\+version = "(v\d+\.\d+)"' | grep -oP 'v\d+\.\d+') >> "$GITHUB_OUTPUT"
           else
-            echo "skip" >> $GITHUB_OUTPUT
+            echo version=skip >> $GITHUB_OUTPUT
       - name: Set up QEMU
         if: steps.id.check-for-update.output.version != skip
         uses: docker/setup-qemu-action@v3
