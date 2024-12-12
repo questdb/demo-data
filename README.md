@@ -4,8 +4,9 @@ QuestDb demo website injection app
 # Run
 Python 3.8 required
 ```
-pip install -r requirements.txt
-python demo_questdb.py
+pip install poetry
+poetry install
+poetry run python demo_questdb.py
 ```
 
 # License
