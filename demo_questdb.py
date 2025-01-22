@@ -65,7 +65,6 @@ def main():
         'DOGE-USD',
         'DOT-USD',
         'ETH-BTC',
-        'ETH-DAI',
         'ETH-USDC',
         'ETH-USDT',
         'LTC-BTC',
