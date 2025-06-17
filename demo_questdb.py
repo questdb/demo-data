@@ -72,7 +72,6 @@ def main():
         'SOL-ETH',
         'SOL-USD',
         'UNI-USD',
-        'USDT-USDC',
         'XLM-USD',
     ]
 
