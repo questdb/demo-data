@@ -56,15 +56,12 @@ def main():
     hanlder = FeedHandler()
 
     symbols = [
-        'ADA-USDC',
         'ADA-USDT',
         'AVAX-USD',
-        'BTC-USDC',
         'BTC-USDT',
         'DAI-USD',
         'DOT-USD',
         'ETH-BTC',
-        'ETH-USDC',
         'ETH-USDT',
         'LTC-BTC',
         'LTC-USD',        
