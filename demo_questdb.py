@@ -41,10 +41,6 @@ class TradeQuest(QuestCallback, BackendCallback):
     async def write(self, data):
         update = f'{self.key},symbol={data["symbol"]},side={data["side"]} price={data["price"]},amount={data["amount"]} {int(data["timestamp"] * 1_000_000_000)}'
         await self.queue.put(update)
-        if data["symbol"].endswith("-USDT"):
-            # Fake *-USD trades with *-USDT
-            await self.queue.put(update.replace("-USDT,side", "-USD,side"))
-
 
 def main():
     host = os.getenv("QUEST_HOST", default=QUEST_HOST)
