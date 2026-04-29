@@ -55,7 +55,6 @@ def main():
         'ADA-USDT',
         'AVAX-USD',
         'BTC-USDT',
-        'DAI-USD',
         'DOT-USD',
         'ETH-BTC',
         'ETH-USDT',
