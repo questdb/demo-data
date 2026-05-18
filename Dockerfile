@@ -14,6 +14,6 @@ COPY --chown=crypto-demo:crypto-demo . .
 
 ENV PATH=$PATH:/home/crypto-demo/.local/bin
 RUN pip install poetry
-RUN poetry install
+RUN poetry install --no-root
 
 ENTRYPOINT ["poetry", "run", "python", "demo_questdb.py"]
