@@ -7,12 +7,28 @@ import os
 from cryptofeed import FeedHandler
 from cryptofeed.backends.backend import BackendCallback
 from cryptofeed.backends.socket import SocketCallback
+from cryptofeed.connection import RestEndpoint, Routes
 from cryptofeed.defines import TRADES
 from cryptofeed.exchanges import OKX
 
 
 QUEST_HOST = '127.0.0.1'
 QUEST_PORT = 9009
+
+
+class OKXSpot(OKX):
+    # cryptofeed initializes OKX by parsing every instrument type, but OKX now
+    # returns some FUTURES instIds without the expiry segment cryptofeed expects.
+    # This demo only subscribes to spot trades, so load only SPOT metadata.
+    rest_endpoints = [
+        RestEndpoint('https://www.okx.com', routes=Routes([
+            '/api/v5/public/instruments?instType=SPOT',
+        ]))
+    ]
+
+    @classmethod
+    def _parse_symbol_data(cls, data):
+        return super()._parse_symbol_data([data] if isinstance(data, dict) else data)
 
 
 class QuestCallback(SocketCallback):
@@ -67,7 +83,7 @@ def main():
 
     # USDT is almost USD
     symbols = [s.replace("-USD", "-USDT") if not s.endswith('-USDT') and not s.endswith('-USDC') else s for s in symbols]
-    hanlder.add_feed(OKX(channels=[TRADES], symbols=symbols,
+    hanlder.add_feed(OKXSpot(channels=[TRADES], symbols=symbols,
                          callbacks={TRADES: TradeQuest(host=host, port=port)}))
     hanlder.run()
 
